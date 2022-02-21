@@ -8,16 +8,30 @@ class SignUpPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            AuthServices.signUp(
-                    "Sahibul", "snf12@gmail.com", "123456", ["romance"], "")
-                .then((value) {
-              print(value.user);
-              print(value.errorMessage);
-            });
-          },
-          child: const Text("Sign Up"),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                AuthServices.signUp(
+                        "Sahibul", "snf@gmail.com", "131211", ["romance"], "")
+                    .then((value) {
+                  print(value.user);
+                  print(value.errorMessage);
+                });
+              },
+              child: const Text("Sign Up"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                AuthServices.signIn("snf@gmail.com", "131211").then((value) {
+                  print(value.user);
+                  print(value.errorMessage);
+                });
+              },
+              child: const Text("Sign In"),
+            ),
+          ],
         ),
       ),
     );

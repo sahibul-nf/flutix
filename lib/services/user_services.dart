@@ -19,8 +19,33 @@ class UserServices {
       'email': user.email,
       'favorite_genres': genres,
       'balance': user.balance,
-      'preferrend_film_language': user.preferredFilmLanguage,
+      'preferred_film_language': user.preferredFilmLanguage,
       'avatar_url': user.avatar ?? ""
     });
+  }
+
+  static Future<User> getUser(String? id) async {
+    DocumentSnapshot snapshot = await _users.doc(id).get();
+
+    print(snapshot.data());
+
+    var email = snapshot.get('email');
+    var avatarUrl = snapshot.get('avatar_url');
+    var balance = snapshot.get('balance');
+    var fullName = snapshot.get('full_name');
+    var preferredFilmLanguage = snapshot.get('preferred_film_language');
+
+    String temp = snapshot.get('favorite_genres');
+    var favoriteGenres = temp.split(",");
+
+    return User(
+      id,
+      email,
+      avatar: avatarUrl,
+      balance: balance,
+      favoriteGenres: favoriteGenres,
+      fullName: fullName,
+      preferredFilmLanguage: preferredFilmLanguage,
+    );
   }
 }

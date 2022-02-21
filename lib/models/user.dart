@@ -26,4 +26,16 @@ class User extends Equatable {
         preferredFilmLanguage,
         balance
       ];
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    var user = User(json['uid'], json['email']);
+    user.fullName = json['full_name'];
+    user.avatar = json['avatar_url'];
+    user.preferredFilmLanguage = json['preferrend_file_language'];
+    user.balance = json['balance'];
+
+    String temp = json['favorite_genres'];
+    user.favoriteGenres = temp.split(",");
+    return user;
+  }
 }

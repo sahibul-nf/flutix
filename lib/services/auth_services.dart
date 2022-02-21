@@ -31,4 +31,18 @@ class AuthServices {
       return UserResultFormatter(null, e.toString());
     }
   }
+
+  static Future<UserResultFormatter> signIn(
+      String email, String password) async {
+    try {
+      auth.UserCredential userCredential = await _auth
+          .signInWithEmailAndPassword(email: email, password: password);
+
+      User user = await UserServices.getUser(userCredential.user!.uid);
+
+      return UserResultFormatter(user, null);
+    } on auth.FirebaseAuthException catch (e) {
+      return UserResultFormatter(null, e.toString());
+    }
+  }
 }
