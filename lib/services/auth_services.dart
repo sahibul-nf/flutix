@@ -45,4 +45,8 @@ class AuthServices {
       return UserResultFormatter(null, e.toString());
     }
   }
+
+  static Future<void> signOut() async {
+    await _auth.signOut();
+  }
 }
