@@ -1,14 +1,14 @@
 import 'package:flutix/services/services.dart';
 import 'package:flutter/material.dart';
 
-class SignUpPage extends StatelessWidget {
-  const SignUpPage({Key? key}) : super(key: key);
+class SignInPage extends StatelessWidget {
+  const SignInPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Signup Page"),
+        title: const Text("SignIn Page"),
       ),
       body: Center(
         child: Column(
@@ -16,20 +16,12 @@ class SignUpPage extends StatelessWidget {
           children: [
             ElevatedButton(
               onPressed: () {
-                AuthServices.signUp(
-                        "Sahibul", "snf@gmail.com", "131211", ["romance"], "")
-                    .then((value) {
+                AuthServices.signIn("snf@gmail.com", "131211").then((value) {
                   print(value.user);
                   print(value.errorMessage);
                 });
               },
-              child: const Text("Sign Up"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                AuthServices.signOut();
-              },
-              child: const Text("Sign Out"),
+              child: const Text("Sign In"),
             ),
           ],
         ),
