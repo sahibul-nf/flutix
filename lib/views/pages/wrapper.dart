@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutix/bloc/page_bloc.dart';
+import 'package:flutix/bloc/user_bloc.dart';
 import 'package:flutix/shared/shared.dart';
 import 'package:flutix/views/pages/main_page.dart';
 import 'package:flutix/views/pages/signin_page.dart';
@@ -22,6 +23,8 @@ class Wrapper extends StatelessWidget {
       }
     } else {
       if (prevPageEvent is! GoToMainPage) {
+        context.read<UserBloc>().add(LoadUser(firebaseUser.uid));
+
         prevPageEvent = GoToMainPage();
         context.read<PageBloc>().add(GoToMainPage());
       }

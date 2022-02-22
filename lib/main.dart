@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutix/bloc/user_bloc.dart';
 import 'package:flutix/firebase_options.dart';
 import 'package:flutix/services/services.dart';
 import 'package:flutix/views/pages/wrapper.dart';
@@ -24,7 +25,10 @@ class MyApp extends StatelessWidget {
       value: AuthServices.authStream,
       initialData: null,
       child: MultiBlocProvider(
-        providers: [BlocProvider(create: (_) => PageBloc())],
+        providers: [
+          BlocProvider(create: (_) => PageBloc()),
+          BlocProvider(create: (_) => UserBloc())
+        ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
