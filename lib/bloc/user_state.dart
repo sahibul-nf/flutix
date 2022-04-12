@@ -14,3 +14,9 @@ class UserLoaded extends UserState {
 
   const UserLoaded(this.user);
 }
+
+class UserUpdated extends UserState {
+  final User user;
+
+  const UserUpdated(this.user);
+}

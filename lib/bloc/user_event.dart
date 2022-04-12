@@ -14,3 +14,10 @@ class LoadUser extends UserEvent {
 }
 
 class SignOut extends UserEvent {}
+
+class UpdateUser extends UserEvent {
+  final String? name;
+  final String? avatar;
+
+  const UpdateUser({this.name, this.avatar});
+}

@@ -7,7 +7,7 @@ class AuthServices {
     String fullName,
     String email,
     String password,
-    List<String> favoriteGenre,
+    Set<String> favoriteGenre,
     String preferredFilmLanguage,
   ) async {
     try {
@@ -15,13 +15,13 @@ class AuthServices {
           email: email, password: password);
 
       var user = User(result.user?.uid, result.user?.email,
-          fullName: "No Name",
+          name: "No Name",
           balance: 50000,
           avatar: "",
-          favoriteGenres: const [],
+          favoriteGenres: const {},
           preferredFilmLanguage: "English");
       user.id = result.user?.uid;
-      user.fullName = fullName;
+      user.name = fullName;
       user.favoriteGenres = favoriteGenre;
 
       await UserServices.updateUser(user);
@@ -48,6 +48,28 @@ class AuthServices {
 
   static Future<void> signOut() async {
     await _auth.signOut();
+  }
+
+  // Returns true if email address is in use.
+  static Future<bool> checkIfEmailInUse(String emailAddress) async {
+    try {
+      // Fetch sign-in methods for the email address
+      final list = await _auth.fetchSignInMethodsForEmail(emailAddress);
+
+      // In case list is not empty
+      if (list.isNotEmpty) {
+        // Return true because there is an existing
+        // user using the email address
+        return true;
+      } else {
+        // Return false because email adress is not in use
+        return false;
+      }
+    } catch (error) {
+      // Handle error
+      // ...
+      return true;
+    }
   }
 
   static Stream<auth.User?> get authStream => _auth.authStateChanges();

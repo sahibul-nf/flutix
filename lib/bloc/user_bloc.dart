@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutix/models/models.dart';
@@ -13,7 +15,21 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
       emit(UserLoaded(user));
     });
-    
+
     on<SignOut>((event, emit) => emit(UserInitial()));
+
+    on<UpdateUser>((event, emit) async {
+      User updatedUser =
+          (state as UserLoaded).user.copyWith(avatar: event.avatar);
+
+      log("Update user to storage");
+      await UserServices.updateUser(updatedUser);
+      log("Success to update user data");
+
+      User user = await UserServices.getUser(updatedUser.id);
+
+      // emit(UserLoaded(user));
+      emit(UserUpdated(user));
+    });
   }
 }

@@ -4,9 +4,9 @@ class UserServices {
   static final CollectionReference _users =
       FirebaseFirestore.instance.collection("users");
 
-  static Future<void> updateUser(User? user) async {
+  static Future<void> updateUser(User user) async {
     String genres = "";
-    var favoriteGenres = user!.favoriteGenres;
+    var favoriteGenres = user.favoriteGenres;
 
     if (favoriteGenres!.isNotEmpty) {
       for (var genre in favoriteGenres) {
@@ -15,7 +15,7 @@ class UserServices {
     }
 
     _users.doc(user.id).set({
-      'full_name': user.fullName,
+      'full_name': user.name,
       'email': user.email,
       'favorite_genres': genres,
       'balance': user.balance,
@@ -36,7 +36,7 @@ class UserServices {
     var preferredFilmLanguage = snapshot.get('preferred_film_language');
 
     String temp = snapshot.get('favorite_genres');
-    var favoriteGenres = temp.split(",");
+    var favoriteGenres = temp.split(",").toSet();
 
     return User(
       id,
@@ -44,8 +44,28 @@ class UserServices {
       avatar: avatarUrl,
       balance: balance,
       favoriteGenres: favoriteGenres,
-      fullName: fullName,
+      name: fullName,
       preferredFilmLanguage: preferredFilmLanguage,
     );
+  }
+
+  static Future<String> uploadAvatar(File image) async {
+    String fileName = basename(image.path);
+
+    Reference storageRef = FirebaseStorage.instance.ref().child(fileName);
+
+    log("Upload...");
+    TaskSnapshot snapshot = await storageRef.putFile(image);
+
+    String downloadUrl = "";
+    if (snapshot.state == TaskState.success) {
+      log("Success to upload Avatar...");
+      log("Get Download URL...");
+      downloadUrl = await snapshot.ref.getDownloadURL();
+      log("Success to get Download URL...");
+      log(downloadUrl);
+    }
+
+    return downloadUrl;
   }
 }

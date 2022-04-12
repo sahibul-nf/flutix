@@ -1,19 +1,40 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutix/bloc/page_bloc.dart';
-import 'package:flutix/bloc/user_bloc.dart';
-import 'package:flutix/shared/shared.dart';
-import 'package:flutix/views/pages/main_page.dart';
-import 'package:flutix/views/pages/signin_page.dart';
-import 'package:flutix/views/pages/splash_page.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
-
+part of 'pages.dart';
 class Wrapper extends StatelessWidget {
   const Wrapper({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var primaryColor = ColorPallete.primaryColor;
+    var secondaryColor = ColorPallete.secondaryColor;
+    var successColor = ColorPallete.succesColor;
+    var errorColor = ColorPallete.errorColor;
+
+    var schema = ColorScheme(
+      brightness: Brightness.light,
+      primary: primaryColor,
+      onPrimary: Colors.white,
+      secondary: secondaryColor,
+      onSecondary: Colors.white,
+      error: errorColor,
+      onError: Colors.white,
+      background: Theme.of(context).scaffoldBackgroundColor,
+      onBackground: Colors.black,
+      surface: Colors.white,
+      onSurface: Colors.white,
+      tertiary: successColor,
+      onTertiary: Colors.white,
+    );
+
+    context.read<ThemeBloc>().add(
+          ChangeTheme(
+            ThemeData().copyWith(
+              primaryColor: primaryColor,
+              colorScheme: schema,
+            ),
+          ),
+        );
+
+    // firebaseUser
     User? firebaseUser = Provider.of<User?>(context);
 
     if (firebaseUser == null) {
@@ -35,7 +56,13 @@ class Wrapper extends StatelessWidget {
           ? const SplashPage()
           : (pageState is OnLoginPage)
               ? const SignInPage()
-              : const MainPage(),
+              : (pageState is OnRegisterPage)
+                  ? SignUpPage(pageState.data)
+                  : (pageState is OnProfilingSelectedPage)
+                      ? ProfilingSelectedPage(pageState.data)
+                      : (pageState is OnAccountConfirmationPage)
+                          ? AccountConfirmationPage(pageState.data)
+                          : const MainPage(),
     );
   }
 }
